@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#081222">
-<title>四班二輪 V6.9 假日穩定版</title>
+<title>四班二輪班表</title>
 <style>
 :root{
   --bg:#081222;--card:#0f1d31;--line:#29405d;--text:#f5f7fb;--muted:#9eafc6;
@@ -59,7 +59,7 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 </head>
 <body>
 <div class="wrap">
-<header><div><h1 id="appTitle">B班・四班二輪</h1><div class="sub"><span id="appSub">V6.9 假日穩定版｜2做2休｜2026・2027官方假日｜至2040年</span></div></div><button class="theme" id="themeBtn">☀ / 🌙</button></header>
+<header><div><h1 id="appTitle">四班二輪班表</h1><div class="sub"><span id="appSub">V6.9 假日穩定版｜2做2休｜2026・2027官方假日｜至2040年</span></div></div><button class="theme" id="themeBtn">☀ / 🌙</button></header>
 <section class="card">
 <div class="topbar"><div class="monthTitle" id="monthTitle"></div><button class="todayBtn" id="todayBtn">今天</button></div>
 <div class="nav" style="margin-top:14px"><button id="prev">‹</button><strong id="navTitle"></strong><button id="next">›</button></div>
@@ -276,7 +276,7 @@ function saveSchedule(){
 }
 function updateScheduleUI(){
  const c=scheduleConfig();
- $("appTitle").textContent=c.team+"班・四班二輪";
+  $("appTitle").textContent="四班二輪班表";
  $("appSub").textContent=`V6.9 假日穩定版｜${c.work}做${c.off}休｜2026・2027官方假日｜至2040年`;
  $("ruleSummary").innerHTML=`${c.team}班：${c.work}做${c.off}休。<br>循環起始：${$("cycleStart").value}（第一個上班日）<br>1–2月：${$("shift12").value==="night"?"夜班":"早班"}；3–4月：${$("shift34").value==="night"?"夜班":"早班"}；5–6月：${$("shift56").value==="night"?"夜班":"早班"}；7–8月：${$("shift78").value==="night"?"夜班":"早班"}；9–10月：${$("shift910").value==="night"?"夜班":"早班"}；11–12月：${$("shift1112").value==="night"?"夜班":"早班"}。`;
 }
