@@ -44,7 +44,7 @@ h1{margin:0;font-size:28px}.sub{color:var(--muted);margin-top:6px}
 .term{color:#0866f5;font-size:10px;margin-top:3px;font-weight:800}
 .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:15px;border-top:1px solid #52647a;color:var(--muted)}
 .dot{width:14px;height:14px;display:inline-block;border-radius:4px;margin-right:5px;vertical-align:-2px}
-.blue{background:#0866f5}.purple{background:var(--purple)}.pink{background:var(--offbg)}.red{background:var(--red)}.green{background:var(--green)}
+.blue{background:#0866f5}.purple{background:var(--purple)}.pink{background:var(--offbg)}.red{background:var(--red)}.orange{background:#f59e0b}.green{background:var(--green)}
 h2{font-size:25px;margin:0 0 16px}.info{line-height:1.8;color:#dce6f4;margin-bottom:15px}.info strong{color:white}
 .actions{display:flex;flex-wrap:wrap;gap:10px}.secondary{background:#17263d;color:white;border:0;border-radius:16px;padding:13px 18px;font-weight:700}
 textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17263d;color:white;border-radius:18px;padding:15px;resize:vertical;margin-top:12px}
@@ -67,13 +67,13 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 </head>
 <body>
 <div class="wrap">
-<header><div><h1 id="appTitle">四班二輪班表</h1><div class="sub"><span id="appSub">V7.1 年月滾輪選擇版｜2做2休｜2026・2027官方假日｜至2040年</span></div></div><button class="theme" id="themeBtn">☀ / 🌙</button></header>
+<header><div><h1 id="appTitle">四班二輪班表</h1><div class="sub"><span id="appSub">V7.1 年月滾輪選擇版</span></div></div><button class="theme" id="themeBtn">☀ / 🌙</button></header>
 <section class="card">
 <div class="topbar"><div class="monthTitle" id="monthTitle"></div><button class="todayBtn" id="todayBtn">今天</button></div>
 <div class="nav" style="margin-top:14px"><button id="prev" aria-label="上一個月">‹</button><button class="pickerTrigger" id="pickerTrigger" aria-label="選擇年份與月份"></button><button id="next" aria-label="下一個月">›</button></div>
 <div class="week"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
 <div class="grid" id="calendar"></div>
-<div class="legend"><span><i class="dot blue"></i>早班</span><span><i class="dot purple"></i>夜班</span><span><i class="dot pink"></i>休假</span><span><i class="dot red"></i>國定假日／補假</span><span><i class="dot green"></i>節氣</span></div>
+<div class="legend"><span><i class="dot blue"></i>早班</span><span><i class="dot purple"></i>夜班</span><span><i class="dot pink"></i>休假</span><span><i class="dot red"></i>國定假日／補假</span><span><i class="dot orange"></i>加班</span><span><i class="dot green"></i>節氣</span></div>
 </section>
 <section class="card"><h2>今日上班提醒</h2><div class="info" id="todayReminder"></div></section>
 <section class="card"><h2>選擇日期</h2><div class="info" id="dateInfo">請點選月曆日期</div>
@@ -83,19 +83,15 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 <section class="card"><h2>國定假日資料</h2>
 <div class="info" id="holidaySyncStatus">準備檢查政府開放資料…</div>
 <div class="actions"><button class="primary" id="syncHolidays">檢查假日資料</button></div>
-<div class="notice">2026、2027國定假日與補假已內建，不需要連線更新。2028～2040顯示固定國定假日、農曆節日與節氣。</div>
+<div class="notice">2028～2040顯示固定國定假日、農曆節日與節氣。</div>
 </section>
 <section class="card"><h2>班表設定</h2><div class="settings">
 <div class="field"><label>班別名稱</label><select id="team"><option>A</option><option selected>B</option><option>C</option><option>D</option></select></div>
 <div class="field"><label>循環起始日（第一個上班日）</label><input id="cycleStart" type="date" value="2026-01-02"></div>
-<div class="field"><label>連續上班天數</label><input id="workDays" type="number" min="1" max="30" value="2"></div>
-<div class="field"><label>連續休假天數</label><input id="offDays" type="number" min="1" max="30" value="2"></div>
-<div class="field"><label>1–2月</label><select id="shift12"><option value="night" selected>夜班</option><option value="day">早班</option></select></div>
-<div class="field"><label>3–4月</label><select id="shift34"><option value="night">夜班</option><option value="day" selected>早班</option></select></div>
-<div class="field"><label>5–6月</label><select id="shift56"><option value="night" selected>夜班</option><option value="day">早班</option></select></div>
-<div class="field"><label>7–8月</label><select id="shift78"><option value="night">夜班</option><option value="day" selected>早班</option></select></div>
-<div class="field"><label>9–10月</label><select id="shift910"><option value="night" selected>夜班</option><option value="day">早班</option></select></div>
-<div class="field"><label>11–12月</label><select id="shift1112"><option value="night">夜班</option><option value="day" selected>早班</option></select></div>
+<div class="field"><label>連續上班天數</label><select id="workDays"><option value="2" selected>2天</option><option value="3">3天</option><option value="4">4天</option></select></div>
+<div class="field"><label>連續休假天數</label><select id="offDays"><option value="2" selected>休假2天</option><option value="3">休假3天</option><option value="4">休假4天</option></select></div>
+<div class="field"><label>日夜班切換週期</label><select id="rotationMonths"><option value="2" selected>每2個月切換</option><option value="3">每3個月切換</option></select></div>
+<div class="field"><label>第一輪班別</label><select id="firstShift"><option value="night" selected>夜班</option><option value="day">早班</option></select></div>
 <div class="field"><label>早班上班</label><input id="dayStart" type="time" value="08:00"></div>
 <div class="field"><label>早班下班</label><input id="dayEnd" type="time" value="20:10"></div>
 <div class="field"><label>夜班上班</label><input id="nightStart" type="time" value="20:00"></div>
@@ -103,9 +99,9 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 <div class="field"><label>早班提醒</label><input id="dayAlarm" type="time" value="05:50"></div>
 <div class="field"><label>夜班提醒</label><input id="nightAlarm" type="time" value="17:50"></div>
 </div>
-<div class="actions" style="margin-top:14px"><button class="primary" id="saveSchedule">儲存班表設定</button><button class="secondary" id="resetSchedule">恢復B班預設</button></div>
+<div class="actions" style="margin-top:14px"><button class="primary" id="saveSchedule">儲存班表設定</button><button class="secondary" id="resetSchedule">恢復預設</button></div>
 <div class="notice" id="ruleSummary"></div>
-<div class="notice">每支手機會各自保存自己的班表設定；分享同一網址給 A／C／D 班時，他們修改自己的設定不會改到你的 B 班。<br><br>2026、2027國定假日及補假採已建資料；2028～2040固定假日依規則顯示。</div></section>
+</section>
 </div>
 <div class="pickerBackdrop" id="yearMonthDialog" role="dialog" aria-modal="true" aria-labelledby="pickerHeading">
  <div class="pickerPanel">
@@ -141,12 +137,10 @@ function scheduleConfig(){
  return{team:$("team").value||"B",base:localDate(a[0],a[1],a[2]),work,off};
 }
 function monthShift(m){
- if(m<=2)return $("shift12").value;
- if(m<=4)return $("shift34").value;
- if(m<=6)return $("shift56").value;
- if(m<=8)return $("shift78").value;
- if(m<=10)return $("shift910").value;
- return $("shift1112").value;
+ const months=parseInt($("rotationMonths").value)||2;
+ const block=Math.floor((m-1)/months);
+ const first=$("firstShift").value||"night";
+ return block%2===0?first:(first==="night"?"day":"night");
 }
 function baseShiftStatus(d){
  const c=scheduleConfig(),target=localDate(d.getFullYear(),d.getMonth()+1,d.getDate());
@@ -229,7 +223,7 @@ function normalizeHolidayDate(v){
 }
 async function syncOfficialHolidays(manual=false){
  const status=$("holidaySyncStatus");
- status.innerHTML='✅ 假日資料正常<br><span class="notice">2026、2027官方假日與補假已內建，不需要網路連線。</span>';
+ status.innerHTML='✅ 假日資料正常';
  if(manual)alert("假日資料正常。\n\n2026、2027官方假日與補假已經內建，不需要連線更新。");
  render();
 }
@@ -290,8 +284,8 @@ $("overtimeBtn").onclick=()=>setDayOverride("overtime");
 $("restoreDayBtn").onclick=restoreDay;
 $("themeBtn").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark")};
 try{if(localStorage.getItem("theme")==="light")document.body.classList.add("light")}catch(e){}
-const scheduleIds=["team","cycleStart","workDays","offDays","shift12","shift34","shift56","shift78","shift910","shift1112","dayStart","dayEnd","nightStart","nightEnd","dayAlarm","nightAlarm"];
-const defaults={team:"B",cycleStart:"2026-01-02",workDays:"2",offDays:"2",shift12:"night",shift34:"day",shift56:"night",shift78:"day",shift910:"night",shift1112:"day",dayStart:"08:00",dayEnd:"20:10",nightStart:"20:00",nightEnd:"08:10",dayAlarm:"05:50",nightAlarm:"17:50"};
+const scheduleIds=["team","cycleStart","workDays","offDays","rotationMonths","firstShift","dayStart","dayEnd","nightStart","nightEnd","dayAlarm","nightAlarm"];
+const defaults={team:"B",cycleStart:"2026-01-02",workDays:"2",offDays:"2",rotationMonths:"2",firstShift:"night",dayStart:"08:00",dayEnd:"20:10",nightStart:"20:00",nightEnd:"08:10",dayAlarm:"05:50",nightAlarm:"17:50"};
 function loadSchedule(){
  scheduleIds.forEach(id=>{
   let v=null;
@@ -307,14 +301,14 @@ function saveSchedule(){
 function updateScheduleUI(){
  const c=scheduleConfig();
   $("appTitle").textContent="四班二輪班表";
- $("appSub").textContent=`V7.1 年月滾輪選擇版｜${c.work}做${c.off}休｜2026・2027官方假日｜至2040年`;
- $("ruleSummary").innerHTML=`${c.team}班：${c.work}做${c.off}休。<br>循環起始：${$("cycleStart").value}（第一個上班日）<br>1–2月：${$("shift12").value==="night"?"夜班":"早班"}；3–4月：${$("shift34").value==="night"?"夜班":"早班"}；5–6月：${$("shift56").value==="night"?"夜班":"早班"}；7–8月：${$("shift78").value==="night"?"夜班":"早班"}；9–10月：${$("shift910").value==="night"?"夜班":"早班"}；11–12月：${$("shift1112").value==="night"?"夜班":"早班"}。`;
+ $("appSub").textContent="V7.1 年月滾輪選擇版";
+ $("ruleSummary").innerHTML=`日夜班每 ${$("rotationMonths").value} 個月切換，第一輪為 ${$("firstShift").value==="night"?"夜班":"早班"}。`;
 }
 scheduleIds.forEach(id=>$(id).addEventListener("change",()=>{updateScheduleUI();render();showTodayReminder()}));
 $("saveSchedule").onclick=()=>{saveSchedule();alert("班表設定已儲存到這支手機。")};
 $("resetSchedule").onclick=()=>{
  scheduleIds.forEach(id=>{$(id).value=defaults[id];localStorage.removeItem("v64_"+id)});
- saveSchedule();alert("已恢復 B 班預設設定。");
+ saveSchedule();alert("已恢復預設設定。");
 };
 
 function showTodayReminder(){
