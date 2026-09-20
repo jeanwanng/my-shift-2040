@@ -86,18 +86,18 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 <div class="notice">2028～2040顯示固定國定假日、農曆節日與節氣。</div>
 </section>
 <section class="card"><h2>班表設定</h2><div class="settings">
-<div class="field"><label>班別名稱</label><select id="team"><option>A</option><option selected>B</option><option>C</option><option>D</option></select></div>
-<div class="field"><label>循環起始日（第一個上班日）</label><input id="cycleStart" type="date" value="2026-01-02"></div>
-<div class="field"><label>連續上班天數</label><select id="workDays"><option value="2" selected>2天</option><option value="3">3天</option><option value="4">4天</option></select></div>
-<div class="field"><label>連續休假天數</label><select id="offDays"><option value="2" selected>休假2天</option><option value="3">休假3天</option><option value="4">休假4天</option></select></div>
-<div class="field"><label>日夜班切換週期</label><select id="rotationMonths"><option value="2" selected>每2個月切換</option><option value="3">每3個月切換</option></select></div>
-<div class="field"><label>第一輪班別</label><select id="firstShift"><option value="night" selected>夜班</option><option value="day">早班</option></select></div>
-<div class="field"><label>早班上班</label><input id="dayStart" type="time" value="08:00"></div>
-<div class="field"><label>早班下班</label><input id="dayEnd" type="time" value="20:10"></div>
-<div class="field"><label>夜班上班</label><input id="nightStart" type="time" value="20:00"></div>
-<div class="field"><label>夜班下班</label><input id="nightEnd" type="time" value="08:10"></div>
-<div class="field"><label>早班提醒</label><input id="dayAlarm" type="time" value="05:50"></div>
-<div class="field"><label>夜班提醒</label><input id="nightAlarm" type="time" value="17:50"></div>
+<div class="field"><label>班別名稱</label><select id="team"><option value="" selected>未設定</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+<div class="field"><label>循環起始日（第一個上班日）</label><input id="cycleStart" type="date"></div>
+<div class="field"><label>連續上班天數</label><select id="workDays"><option value="" selected>未設定</option><option value="2">2天</option><option value="3">3天</option><option value="4">4天</option></select></div>
+<div class="field"><label>連續休假天數</label><select id="offDays"><option value="" selected>未設定</option><option value="2">休假2天</option><option value="3">休假3天</option><option value="4">休假4天</option></select></div>
+<div class="field"><label>日夜班切換週期</label><select id="rotationMonths"><option value="" selected>未設定</option><option value="2">每2個月切換</option><option value="3">每3個月切換</option></select></div>
+<div class="field"><label>第一輪班別</label><select id="firstShift"><option value="" selected>未設定</option><option value="night">夜班</option><option value="day">早班</option></select></div>
+<div class="field"><label>早班上班</label><input id="dayStart" type="time" value="00:00"></div>
+<div class="field"><label>早班下班</label><input id="dayEnd" type="time" value="00:00"></div>
+<div class="field"><label>夜班上班</label><input id="nightStart" type="time" value="00:00"></div>
+<div class="field"><label>夜班下班</label><input id="nightEnd" type="time" value="00:00"></div>
+<div class="field"><label>早班提醒</label><input id="dayAlarm" type="time" value="00:00"></div>
+<div class="field"><label>夜班提醒</label><input id="nightAlarm" type="time" value="00:00"></div>
 </div>
 <div class="actions" style="margin-top:14px"><button class="primary" id="saveSchedule">儲存班表設定</button><button class="secondary" id="resetSchedule">恢復預設</button></div>
 <div class="notice" id="ruleSummary"></div>
@@ -132,17 +132,18 @@ function key(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate
 function localDate(y,m,d){return new Date(y,m-1,d,12,0,0)}
 
 function scheduleConfig(){
- const raw=$("cycleStart").value||"2026-01-02", a=raw.split("-").map(Number);
- const work=Math.max(1,parseInt($("workDays").value)||2), off=Math.max(1,parseInt($("offDays").value)||2);
- return{team:$("team").value||"B",base:localDate(a[0],a[1],a[2]),work,off};
+ const raw=$("cycleStart").value, a=raw.split("-").map(Number);
+ return{team:$("team").value,base:localDate(a[0],a[1],a[2]),work:parseInt($("workDays").value),off:parseInt($("offDays").value)};
 }
+function hasScheduleRule(){return !!($("team").value&&$("cycleStart").value&&$("workDays").value&&$("offDays").value&&$("rotationMonths").value&&$("firstShift").value)}
 function monthShift(m){
- const months=parseInt($("rotationMonths").value)||2;
+ const months=parseInt($("rotationMonths").value);
  const block=Math.floor((m-1)/months);
- const first=$("firstShift").value||"night";
+ const first=$("firstShift").value;
  return block%2===0?first:(first==="night"?"day":"night");
 }
 function baseShiftStatus(d){
+ if(!hasScheduleRule())return{work:false,name:"",unconfigured:true};
  const c=scheduleConfig(),target=localDate(d.getFullYear(),d.getMonth()+1,d.getDate());
  const diff=Math.round((target-c.base)/86400000),len=c.work+c.off,cycle=((diff%len)+len)%len;
  if(cycle>=c.work)return{work:false,name:"休假"};
@@ -160,6 +161,7 @@ function shiftStatus(d){
 function reminderTime(s){const n=s.shiftName||s.name;return n==="早班"?$("dayAlarm").value:$("nightAlarm").value}
 function saveDayChanges(){localStorage.setItem("v66_day_overrides",JSON.stringify(dayOverrides));localStorage.setItem("v66_day_reminders",JSON.stringify(dayReminders))}
 function setDayOverride(type){
+ if(!hasScheduleRule()){alert("請先完成班表設定。");return}
  const k=key(selected),base=baseShiftStatus(selected);
  if(type==="leave"&&!base.work){alert("原本就是休假日，不需要改請假。若要上班請按『改加班』。");return}
  if(type==="overtime"&&base.work){alert("原本就是上班日，不需要改加班。若不上班請按『改請假』。");return}
@@ -255,15 +257,21 @@ function render(){
  for(let i=0;i<firstDay;i++){const b=document.createElement("div");b.className="day empty";grid.appendChild(b)}
  for(let d=1;d<=total;d++){
   const date=new Date(y,m,d,12),status=shiftStatus(date),holiday=holidayName(date),term=solarTerm(m+1,d),lunar=lunarText(date),cell=document.createElement("div");
-  cell.className="day";if(date.getDay()===0||date.getDay()===6)cell.classList.add("weekend");if(!status.work)cell.classList.add("offDay");if(holiday)cell.classList.add("holiday");
+  cell.className="day";if(date.getDay()===0||date.getDay()===6)cell.classList.add("weekend");if(!status.work&&!status.unconfigured)cell.classList.add("offDay");if(holiday)cell.classList.add("holiday");
   if(key(date)===key(selected))cell.classList.add("selected");if(key(date)===key(new Date()))cell.classList.add("today");
   let sc=status.name==="早班"?"dayShift":status.name==="夜班"?"nightShift":status.override==="overtime"?"overtime":status.override==="leave"?"leave":"off";
   const reminder=dayReminders[key(date)];
-  cell.innerHTML=`<div class="num">${d}</div><div class="lunar">${lunar}</div><div class="shift ${sc}">${status.name}</div>${reminder?`<div class="statusBadge on">提醒 ${reminder.time}</div>`:status.override==="leave"?`<div class="statusBadge off">提醒已關閉</div>`:""}${holiday?`<div class="holidayName">${holiday}</div>`:""}${term?`<div class="term">${term}</div>`:""}`;
+  cell.innerHTML=`<div class="num">${d}</div><div class="lunar">${lunar}</div>${status.name?`<div class="shift ${sc}">${status.name}</div>`:""}${reminder?`<div class="statusBadge on">提醒 ${reminder.time}</div>`:status.override==="leave"?`<div class="statusBadge off">提醒已關閉</div>`:""}${holiday?`<div class="holidayName">${holiday}</div>`:""}${term?`<div class="term">${term}</div>`:""}`;
   cell.onclick=()=>{selected=date;render();showSelected()};grid.appendChild(cell);
  } showSelected();
 }
 function showSelected(){
+ if(!hasScheduleRule()){
+  const h=holidayName(selected);
+  $("dateInfo").innerHTML=`<strong>${selected.getFullYear()}年 ${selected.getMonth()+1}月 ${selected.getDate()}日</strong><br>農曆：${lunarText(selected)||"—"}<br>班表：尚未設定<br>${h?`假日：<strong style="color:#ff7183">${h}</strong>`:"假日：—"}`;
+  $("note").value=notes[key(selected)]||"";
+  return;
+ }
  const s=shiftStatus(selected),h=holidayName(selected),sn=s.shiftName||s.name;let detail=sn==="早班"?$("dayStart").value+" ～ "+$("dayEnd").value:sn==="夜班"?$("nightStart").value+" ～ 次日 "+$("nightEnd").value:"今天休假";
  const reminder=dayReminders[key(selected)];
  $("dateInfo").innerHTML=`<strong>${selected.getFullYear()}年 ${selected.getMonth()+1}月 ${selected.getDate()}日</strong><br>農曆：${lunarText(selected)||"—"}<br>班別：<strong>${s.name}</strong><br>時間：${detail}<br>提醒：<strong>${reminder?reminder.time:"未建立／已關閉"}</strong><br>${h?`假日：<strong style="color:#ff7183">${h}</strong>`:"假日：—"}`;
@@ -278,19 +286,20 @@ $("pickerCancel").onclick=()=>$("yearMonthDialog").classList.remove("open");
 $("pickerDone").onclick=()=>{view=new Date(pickerState.year,pickerState.month-1,1);selected=new Date(pickerState.year,pickerState.month-1,1,12);$("yearMonthDialog").classList.remove("open");render()};
 $("yearMonthDialog").onclick=e=>{if(e.target===$("yearMonthDialog"))$("yearMonthDialog").classList.remove("open")};
 $("saveNote").onclick=()=>{notes[key(selected)]=$("note").value;localStorage.setItem("shiftNotes",JSON.stringify(notes));alert("記事已儲存")};
-$("remindBtn").onclick=()=>{const s=shiftStatus(selected);if(!s.work){alert("這一天是休假／請假，不建立上班提醒。");return}const a=reminderTime(s);dayReminders[key(selected)]={time:a,shift:s.shiftName||s.name,auto:false};saveDayChanges();render();renderReminderLog();alert((selected.getMonth()+1)+"月"+selected.getDate()+"日 "+s.name+"提醒已記錄："+a+"。\n\n注意：iPhone 網頁不能直接新增系統鬧鐘，系統鬧鐘仍需透過『捷徑』或『時鐘』設定。")};
+$("remindBtn").onclick=()=>{if(!hasScheduleRule()){alert("請先完成班表設定。");return}const s=shiftStatus(selected);if(!s.work){alert("這一天是休假／請假，不建立上班提醒。");return}const a=reminderTime(s);dayReminders[key(selected)]={time:a,shift:s.shiftName||s.name,auto:false};saveDayChanges();render();renderReminderLog();alert((selected.getMonth()+1)+"月"+selected.getDate()+"日 "+s.name+"提醒已記錄："+a+"。\n\n注意：iPhone 網頁不能直接新增系統鬧鐘，系統鬧鐘仍需透過『捷徑』或『時鐘』設定。")};
 $("leaveBtn").onclick=()=>setDayOverride("leave");
 $("overtimeBtn").onclick=()=>setDayOverride("overtime");
 $("restoreDayBtn").onclick=restoreDay;
 $("themeBtn").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark")};
 try{if(localStorage.getItem("theme")==="light")document.body.classList.add("light")}catch(e){}
 const scheduleIds=["team","cycleStart","workDays","offDays","rotationMonths","firstShift","dayStart","dayEnd","nightStart","nightEnd","dayAlarm","nightAlarm"];
-const defaults={team:"B",cycleStart:"2026-01-02",workDays:"2",offDays:"2",rotationMonths:"2",firstShift:"night",dayStart:"08:00",dayEnd:"20:10",nightStart:"20:00",nightEnd:"08:10",dayAlarm:"05:50",nightAlarm:"17:50"};
+function todayKey(){const t=new Date();return key(t)}
+const defaults={team:"",cycleStart:todayKey(),workDays:"",offDays:"",rotationMonths:"",firstShift:"",dayStart:"00:00",dayEnd:"00:00",nightStart:"00:00",nightEnd:"00:00",dayAlarm:"00:00",nightAlarm:"00:00"};
 function loadSchedule(){
  scheduleIds.forEach(id=>{
   let v=null;
   try{v=localStorage.getItem("v64_"+id)}catch(e){}
-  $(id).value=(v!==null&&v!==undefined&&v!=="")?v:defaults[id];
+  $(id).value=(v!==null&&v!==undefined)?v:defaults[id];
  });
  updateScheduleUI();
 }
@@ -301,8 +310,8 @@ function saveSchedule(){
 function updateScheduleUI(){
  const c=scheduleConfig();
   $("appTitle").textContent="四班二輪班表";
- $("appSub").textContent="V7.1 年月滾輪選擇版";
- $("ruleSummary").innerHTML=`日夜班每 ${$("rotationMonths").value} 個月切換，第一輪為 ${$("firstShift").value==="night"?"夜班":"早班"}。`;
+ $("appSub").textContent="V7.2 年月滾輪選擇版";
+ $("ruleSummary").textContent="";
 }
 scheduleIds.forEach(id=>$(id).addEventListener("change",()=>{updateScheduleUI();render();showTodayReminder()}));
 $("saveSchedule").onclick=()=>{saveSchedule();alert("班表設定已儲存到這支手機。")};
@@ -312,6 +321,7 @@ $("resetSchedule").onclick=()=>{
 };
 
 function showTodayReminder(){
+ if(!hasScheduleRule()){$("todayReminder").innerHTML="尚未設定班表規則。";return}
  const t=new Date(), d=new Date(t.getFullYear(),t.getMonth(),t.getDate(),12), s=shiftStatus(d);
  if(!s.work){
   $("todayReminder").innerHTML="今天是 <strong>休假日</strong>，不建立上班提醒。";
@@ -328,7 +338,7 @@ function renderReminderLog(){
 
 // V6.3 PWA/桌面版更新檢查：每次啟動與回到 App 都向伺服器確認 index.html。
 // 若 GitHub Pages 上的版本內容不同，清除 Cache Storage 後重新載入。
-const APP_VERSION="7.1";
+const APP_VERSION="7.2";
 async function checkForUpdate(){
  try{
   const r=await fetch("./index.html?v="+Date.now(),{cache:"no-store"});
