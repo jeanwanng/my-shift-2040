@@ -7,1076 +7,2267 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#081222">
 
-<title>B班・四班二輪 V6</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>B班・四班二輪 V6.2</title>
 
 <style>
 :root{
   --bg:#081222;
   --card:#0f1d31;
-  --card2:#17263d;
   --line:#29405d;
   --text:#f5f7fb;
   --muted:#9eafc6;
   --blue:#2d6df6;
-  --red:#ff7183;
+  --red:#ff5d70;
   --orange:#ffa51f;
   --purple:#818cf8;
   --gray:#73869e;
   --green:#35d0a0;
-  --offbg:#341d2a;
+  --offbg:#ffe7ee;
+  --holidaybg:#ffdce5;
 }
 
 *{box-sizing:border-box}
 
-html,body{
-  margin:0;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,
-  "PingFang TC","Noto Sans TC",sans-serif;
-}
-
 body{
-  padding:
-    max(14px,env(safe-area-inset-top))
-    12px
-    max(24px,env(safe-area-inset-bottom));
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;
+  background:var(--bg);
+  color:var(--text)
 }
 
-.app{
-  max-width:720px;
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+
+.wrap{
+  max-width:760px;
   margin:auto;
+  padding:calc(20px + env(safe-area-inset-top)) 10px
+          calc(50px + env(safe-area-inset-bottom))
 }
 
-h1{
-  margin:4px 0 3px;
-  font-size:25px;
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:20px 4px
+}
+
+h1{margin:0;font-size:28px}
+
+.sub{
+  color:var(--muted);
+  margin-top:6px
 }
 
 .version{
   color:var(--green);
-  font-weight:800;
-  font-size:13px;
+  font-weight:900;
+  margin-top:7px;
+  font-size:16px
 }
 
-.subtitle{
-  color:var(--muted);
-  font-size:13px;
-  margin:5px 0 15px;
-  line-height:1.6;
+.theme{
+  border:0;
+  border-radius:18px;
+  background:#17263d;
+  color:white;
+  padding:15px 18px;
+  font-size:20px
 }
 
 .card{
   background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:13px;
-  margin-bottom:12px;
-  box-shadow:0 8px 24px rgba(0,0,0,.15);
+  border:2px solid var(--line);
+  border-radius:26px;
+  padding:18px;
+  margin-bottom:18px
 }
 
-.topbar{
-  display:grid;
-  grid-template-columns:48px 1fr 48px;
-  gap:8px;
+.topbar,.nav{
+  display:flex;
+  justify-content:space-between;
   align-items:center;
+  gap:10px
 }
 
 .monthTitle{
-  text-align:center;
-  font-size:20px;
-  font-weight:900;
+  font-size:24px;
+  font-weight:800
 }
 
-button,select,input,textarea{
-  font:inherit;
-}
-
-button{
-  border:1px solid var(--line);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:12px;
-  min-height:42px;
-  padding:8px 12px;
-  font-weight:800;
-}
-
-button:active{
-  transform:scale(.97);
-}
-
-.navbtn{
-  font-size:22px;
-}
-
-.tools{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:10px;
-}
-
-.todayBtn{
+.todayBtn,.primary{
   background:var(--blue);
-  border-color:var(--blue);
+  color:white;
+  border:0;
+  border-radius:18px;
+  padding:13px 20px;
+  font-weight:800
 }
 
-select,input,textarea{
-  width:100%;
-  color:var(--text);
-  background:#0a1728;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:10px;
+.nav{margin-bottom:16px}
+
+.nav button{
+  width:54px;
+  height:54px;
+  border:0;
+  border-radius:17px;
+  background:#17263d;
+  color:white;
+  font-size:25px
+}
+
+.week,.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr)
 }
 
 .week{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:5px;
-  margin-top:13px;
-  margin-bottom:5px;
+  background:#02091a;
+  border:1px solid #17263d
 }
 
 .week div{
   text-align:center;
-  color:var(--muted);
-  font-size:13px;
+  padding:13px 2px;
   font-weight:800;
+  font-size:18px
 }
 
-.week .sun,.week .sat{
-  color:var(--red);
+.week div:first-child,
+.week div:last-child{
+  color:var(--red)
 }
 
-.calendar{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:5px;
-}
+.grid{margin-top:5px}
 
 .day{
   position:relative;
-  min-height:91px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#0b1829;
-  padding:6px 4px;
+  min-height:108px;
+  border:1px solid rgba(75,98,130,.55);
+  padding:7px 5px;
   overflow:hidden;
-  text-align:center;
+  background:rgba(255,255,255,.02)
 }
 
-.day.empty{
-  visibility:hidden;
+.day.empty{opacity:.15}
+
+.day.weekend{
+  background:rgba(245,210,245,.08)
 }
 
-.day.weekend .num{
-  color:var(--red);
-}
-
-.day.off{
+.day.offDay{
   background:var(--offbg);
-  border-color:#69364a;
+  color:#20242c
 }
+
+.day.offDay .lunar{color:#666}
 
 .day.holiday{
-  box-shadow:inset 0 0 0 1px rgba(255,113,131,.45);
+  background:var(--holidaybg);
+  color:#20242c
 }
 
-.day.today{
-  outline:3px solid var(--blue);
-  outline-offset:-2px;
+.day.holiday .lunar{color:#666}
+
+.day.weekend .num,
+.day.holiday .num{
+  color:#e7192d
 }
 
 .day.selected{
-  box-shadow:0 0 0 2px var(--green);
+  outline:3px solid var(--blue);
+  outline-offset:-3px
+}
+
+.day.today{
+  box-shadow:inset 0 0 0 3px #fff
 }
 
 .num{
-  font-size:17px;
-  font-weight:900;
-  line-height:1.2;
-}
-
-.shift{
-  display:inline-block;
-  margin-top:5px;
-  padding:3px 6px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:900;
-}
-
-.shift.dayShift{
-  background:rgba(255,165,31,.18);
-  color:var(--orange);
-  border:1px solid rgba(255,165,31,.5);
-}
-
-.shift.nightShift{
-  background:rgba(129,140,248,.18);
-  color:#b7beff;
-  border:1px solid rgba(129,140,248,.55);
-}
-
-.shift.offShift{
-  background:rgba(255,113,131,.12);
-  color:var(--red);
-  border:1px solid var(--red);
+  font-size:19px;
+  font-weight:900
 }
 
 .lunar{
-  margin-top:5px;
   color:var(--muted);
-  font-size:9px;
-  line-height:1.25;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  font-size:11px;
+  margin-top:3px
+}
+
+.shift{
+  display:block;
+  margin-top:7px;
+  padding:5px 3px;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:900;
+  text-align:center
+}
+
+.shift.dayShift{
+  background:#0866f5;
+  color:white
+}
+
+.shift.nightShift{
+  background:var(--purple);
+  color:white
+}
+
+.shift.off{
+  background:#fff3f6;
+  color:#e7192d;
+  border:1.5px solid #ff4056;
+  font-size:14px
 }
 
 .holidayName{
-  color:var(--red);
-  font-size:9px;
-  font-weight:900;
+  color:#e7192d;
+  font-size:10px;
+  line-height:1.2;
+  margin-top:4px;
+  font-weight:900
+}
+
+.term{
+  color:#0866f5;
+  font-size:10px;
   margin-top:3px;
-  line-height:1.15;
-}
-
-.detailTitle{
-  font-size:18px;
-  font-weight:900;
-  margin-bottom:8px;
-}
-
-.detailLine{
-  padding:5px 0;
-  color:#dce6f4;
-  line-height:1.55;
-}
-
-.detailLine b{
-  color:#fff;
-}
-
-.badge{
-  display:inline-block;
-  border-radius:9px;
-  padding:4px 8px;
-  font-size:12px;
-  font-weight:900;
-}
-
-.badge.work{
-  background:rgba(53,208,160,.15);
-  color:var(--green);
-}
-
-.badge.off{
-  background:rgba(255,113,131,.15);
-  color:var(--red);
-}
-
-.sectionTitle{
-  font-weight:900;
-  margin-bottom:9px;
-}
-
-.settingGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-}
-
-label{
-  display:block;
-  color:var(--muted);
-  font-size:12px;
-}
-
-label input{
-  margin-top:5px;
-}
-
-.note{
-  min-height:90px;
-  resize:vertical;
-}
-
-.small{
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.55;
-  margin-top:8px;
+  font-weight:800
 }
 
 .legend{
   display:flex;
-  gap:7px;
   flex-wrap:wrap;
-  margin-top:10px;
-}
-
-.legend span{
-  font-size:11px;
-  color:var(--muted);
+  gap:14px;
+  margin-top:16px;
+  padding-top:15px;
+  border-top:1px solid #52647a;
+  color:var(--muted)
 }
 
 .dot{
+  width:14px;
+  height:14px;
   display:inline-block;
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  margin-right:4px;
+  border-radius:4px;
+  margin-right:5px;
+  vertical-align:-2px
 }
 
-@media(max-width:390px){
-  .day{
-    min-height:84px;
-    padding:5px 2px;
-  }
+.blue{background:#0866f5}
+.purple{background:var(--purple)}
+.pink{background:var(--offbg)}
+.red{background:var(--red)}
+.green{background:var(--green)}
 
-  .num{font-size:16px}
-  .shift{font-size:10px;padding:3px 4px}
-  .lunar,.holidayName{font-size:8px}
+h2{
+  font-size:25px;
+  margin:0 0 16px
+}
+
+.info{
+  line-height:1.8;
+  color:#dce6f4;
+  margin-bottom:15px
+}
+
+.info strong{color:white}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px
+}
+
+.secondary{
+  background:#17263d;
+  color:white;
+  border:0;
+  border-radius:16px;
+  padding:13px 18px;
+  font-weight:700
+}
+
+textarea{
+  width:100%;
+  min-height:130px;
+  border:2px solid var(--line);
+  background:#17263d;
+  color:white;
+  border-radius:18px;
+  padding:15px;
+  resize:vertical;
+  margin-top:12px
+}
+
+.settings{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+
+.field label{
+  display:block;
+  color:var(--muted);
+  margin-bottom:6px
+}
+
+.field input{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#17263d;
+  color:white;
+  padding:12px
+}
+
+.notice{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin-top:14px
+}
+
+/* V6.2 今日提醒狀態 */
+
+.reminderBox{
+  border:2px solid var(--line);
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:18px;
+  background:#17263d
+}
+
+.reminderTitle{
+  font-size:16px;
+  color:var(--muted);
+  margin-bottom:8px
+}
+
+.reminderMain{
+  font-size:24px;
+  font-weight:900
+}
+
+.reminderSub{
+  margin-top:8px;
+  color:#cbd5e1;
+  line-height:1.6
+}
+
+.reminderWork{
+  border-color:var(--green)
+}
+
+.reminderOff{
+  border-color:var(--red)
+}
+
+.reminderWork .reminderMain{
+  color:#67e8b5
+}
+
+.reminderOff .reminderMain{
+  color:#ff7183
+}
+
+.autoRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:14px 0;
+  border-top:1px solid var(--line);
+  margin-top:14px
+}
+
+.switch{
+  position:relative;
+  width:58px;
+  height:34px;
+  flex:0 0 auto
+}
+
+.switch input{
+  opacity:0;
+  width:0;
+  height:0
+}
+
+.slider{
+  position:absolute;
+  inset:0;
+  background:#64748b;
+  border-radius:99px;
+  transition:.2s
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  width:26px;
+  height:26px;
+  left:4px;
+  top:4px;
+  background:white;
+  border-radius:50%;
+  transition:.2s
+}
+
+.switch input:checked + .slider{
+  background:var(--green)
+}
+
+.switch input:checked + .slider:before{
+  transform:translateX(24px)
+}
+
+.shortcutData{
+  margin-top:14px;
+  padding:12px;
+  border:1px dashed var(--line);
+  border-radius:14px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  word-break:break-all
+}
+
+/* 淺色 */
+
+.light{
+  --bg:#eef3f9;
+  --card:#fff;
+  --line:#c8d5e5;
+  --text:#152033;
+  --muted:#64748b
+}
+
+.light .theme,
+.light .nav button,
+.light .secondary,
+.light textarea,
+.light .field input,
+.light .reminderBox{
+  background:#e4ebf5;
+  color:#152033
+}
+
+.light .week{
+  background:#e8eef7
+}
+
+.light .week div{
+  color:#152033
+}
+
+.light .week div:first-child,
+.light .week div:last-child{
+  color:#e7192d
+}
+
+.light .day.today{
+  box-shadow:inset 0 0 0 3px #111
+}
+
+.light .info{
+  color:#334155
+}
+
+.light .info strong{
+  color:#111827
+}
+
+.light .reminderSub{
+  color:#475569
+}
+
+@media(max-width:520px){
+  h1{font-size:25px}
+  .card{padding:12px;border-radius:22px}
+  .day{min-height:92px;padding:5px 3px}
+  .num{font-size:17px}
+  .lunar,.holidayName,.term{font-size:9px}
+  .shift{font-size:10px}
+  .shift.off{font-size:12px}
+  .settings{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="wrap">
 
-<h1>B班・四班二輪</h1>
-<div class="version">V6 完整版</div>
+<header>
+  <div>
+    <h1>B班・四班二輪</h1>
+    <div class="version">V6.2 上班日自動提醒版</div>
+    <div class="sub">2做2休｜2026・2027官方假日｜至2040年</div>
+  </div>
 
-<div class="subtitle">
-做2休2・每兩個月日夜輪調<br>
-早班 08:00–20:10 ／ 夜班 20:00–隔日 08:10
+  <button class="theme" id="themeBtn">☀ / 🌙</button>
+</header>
+
+
+<!-- 今日自動提醒 -->
+
+<section class="card">
+
+<h2>今日上班提醒</h2>
+
+<div id="todayReminder" class="reminderBox">
+  <div class="reminderTitle">正在讀取今天班表…</div>
 </div>
 
-<div class="card">
+<div class="autoRow">
 
-  <div class="topbar">
-    <button class="navbtn" onclick="changeMonth(-1)">‹</button>
-    <div class="monthTitle" id="monthTitle"></div>
-    <button class="navbtn" onclick="changeMonth(1)">›</button>
+  <div>
+    <strong>上班日自動提醒</strong>
+    <div class="notice" style="margin-top:4px">
+      上班日啟用，休假日自動跳過
+    </div>
   </div>
 
-  <div class="tools">
-    <button class="todayBtn" onclick="goToday()">今天</button>
-    <select id="yearSelect" onchange="jumpYear()"></select>
-  </div>
-
-  <div class="week">
-    <div class="sun">日</div>
-    <div>一</div>
-    <div>二</div>
-    <div>三</div>
-    <div>四</div>
-    <div>五</div>
-    <div class="sat">六</div>
-  </div>
-
-  <div id="calendar" class="calendar"></div>
-
-  <div class="legend">
-    <span><i class="dot" style="background:#ffa51f"></i>早班</span>
-    <span><i class="dot" style="background:#818cf8"></i>夜班</span>
-    <span><i class="dot" style="background:#ff7183"></i>休假</span>
-    <span><i class="dot" style="background:#2d6df6"></i>今天</span>
-  </div>
+  <label class="switch">
+    <input type="checkbox" id="autoReminder" checked>
+    <span class="slider"></span>
+  </label>
 
 </div>
 
-<div class="card" id="detailCard">
-  <div class="detailTitle" id="detailDate">選擇日期</div>
-  <div id="detailContent" class="detailLine">
-    點月曆中的日期即可查看當天班別。
-  </div>
+<div class="shortcutData" id="shortcutData">
+準備 iPhone 捷徑資料…
 </div>
 
-<div class="card">
+</section>
 
-  <div class="sectionTitle">⏰ 鬧鐘設定</div>
 
-  <div class="settingGrid">
+<!-- 月份 -->
 
-    <label>
-      早班鬧鐘
-      <input id="dayAlarm" type="time" value="05:50">
-    </label>
+<section class="card">
 
-    <label>
-      夜班鬧鐘
-      <input id="nightAlarm" type="time" value="17:50">
-    </label>
+<div class="topbar">
 
-  </div>
+  <div class="monthTitle" id="monthTitle"></div>
 
-  <button style="width:100%;margin-top:10px"
-          onclick="saveAlarm()">
-    儲存鬧鐘時間
-  </button>
-
-  <div class="small">
-    iPhone 網頁/PWA 無法像內建「時鐘」App 一樣在背景自行建立系統鬧鐘。
-    這裡會保存你設定的提醒時間，方便查看上班日鬧鐘。
-  </div>
-
-</div>
-
-<div class="card">
-
-  <div class="sectionTitle">📝 當日記事</div>
-
-  <textarea id="note"
-            class="note"
-            placeholder="輸入這一天的記事…"></textarea>
-
-  <button style="width:100%;margin-top:8px"
-          onclick="saveNote()">
-    儲存記事
+  <button class="todayBtn" id="todayBtn">
+    今天
   </button>
 
 </div>
 
+</section>
+
+
+<!-- 月曆 -->
+
+<section class="card">
+
+<div class="nav">
+
+  <button id="prev">‹</button>
+
+  <strong id="navTitle"></strong>
+
+  <button id="next">›</button>
+
 </div>
+
+<div class="week">
+  <div>日</div>
+  <div>一</div>
+  <div>二</div>
+  <div>三</div>
+  <div>四</div>
+  <div>五</div>
+  <div>六</div>
+</div>
+
+<div class="grid" id="calendar"></div>
+
+<div class="legend">
+
+<span>
+<i class="dot blue"></i>
+早班
+</span>
+
+<span>
+<i class="dot purple"></i>
+夜班
+</span>
+
+<span>
+<i class="dot pink"></i>
+休假
+</span>
+
+<span>
+<i class="dot red"></i>
+國定假日／補假
+</span>
+
+<span>
+<i class="dot green"></i>
+節氣
+</span>
+
+</div>
+
+</section>
+
+
+<!-- 日期資訊 -->
+
+<section class="card">
+
+<h2>選擇日期</h2>
+
+<div class="info" id="dateInfo">
+請點選月曆日期
+</div>
+
+<div class="actions">
+
+<button class="primary" id="remindBtn">
+建立當天提醒
+</button>
+
+<button class="secondary" id="saveNote">
+儲存記事
+</button>
+
+</div>
+
+<textarea
+ id="note"
+ placeholder="這一天的記事…">
+</textarea>
+
+</section>
+
+
+<!-- 班表設定 -->
+
+<section class="card">
+
+<h2>班表設定</h2>
+
+<div class="settings">
+
+<div class="field">
+<label>早班上班</label>
+<input id="dayStart" type="time" value="08:00">
+</div>
+
+<div class="field">
+<label>早班下班</label>
+<input id="dayEnd" type="time" value="20:10">
+</div>
+
+<div class="field">
+<label>夜班上班</label>
+<input id="nightStart" type="time" value="20:00">
+</div>
+
+<div class="field">
+<label>夜班下班</label>
+<input id="nightEnd" type="time" value="08:10">
+</div>
+
+<div class="field">
+<label>早班提醒</label>
+<input id="dayAlarm" type="time" value="05:50">
+</div>
+
+<div class="field">
+<label>夜班提醒</label>
+<input id="nightAlarm" type="time" value="17:50">
+</div>
+
+</div>
+
+<div class="notice">
+
+B班：2做2休。<br>
+
+1、2月夜班；
+3、4月早班；
+5、6月夜班；
+7、8月早班；
+9、10月夜班；
+11、12月早班。<br>
+
+以2026年1月2日為上班循環基準。<br><br>
+
+V6.2 會自動判斷今天是否上班。
+休假日不產生上班提醒；
+早班使用早班提醒時間，
+夜班使用夜班提醒時間。<br><br>
+
+目前網頁不會直接建立 iPhone「時鐘」系統鬧鐘；
+下個步驟會使用 iPhone 捷徑自動化連動。
+
+</div>
+
+</section>
+
+</div>
+
 
 <script>
 
-/* =========================
-   V6 基本設定
-========================= */
+/* ==================================================
+   V6.2 版本
+================================================== */
 
-const START_YEAR = 2026;
-const END_YEAR   = 2040;
+const APP_VERSION="6.2";
 
-/*
-  做2休2基準：
-  2026/1/2、1/3 = 上班
-  2026/1/4、1/5 = 休假
-*/
-const WORK_BASE = new Date(2026,0,2);
 
-/* 現在顯示月份 */
-let viewDate = new Date();
+/* ==================================================
+   自動偵測新版
+================================================== */
 
-/* 選取日期 */
-let selectedDate = new Date();
+async function checkForUpdate(){
 
-/* =========================
-   工具
-========================= */
+  if(!navigator.onLine)return;
+
+  try{
+
+    const url=
+      location.pathname+
+      "?update_check="+
+      Date.now();
+
+    const response=
+      await fetch(
+        url,
+        {
+          cache:"no-store",
+          headers:{
+            "Cache-Control":"no-cache"
+          }
+        }
+      );
+
+    if(!response.ok)return;
+
+    const html=
+      await response.text();
+
+    const match=
+      html.match(
+        /const APP_VERSION\s*=\s*["']([^"']+)["']/
+      );
+
+    if(!match)return;
+
+    const serverVersion=
+      match[1];
+
+    if(serverVersion!==APP_VERSION){
+
+      const reloadKey=
+        "shiftAppReload_"+serverVersion;
+
+      if(
+        sessionStorage.getItem(reloadKey)!=="1"
+      ){
+
+        sessionStorage.setItem(
+          reloadKey,
+          "1"
+        );
+
+        location.replace(
+          location.pathname+
+          "?v="+
+          encodeURIComponent(serverVersion)
+        );
+
+      }
+    }
+
+  }catch(e){
+
+    console.log(
+      "更新檢查暫時無法完成",
+      e
+    );
+
+  }
+}
+
+
+window.addEventListener(
+  "load",
+  ()=>{
+    setTimeout(
+      checkForUpdate,
+      1200
+    );
+  }
+);
+
+
+document.addEventListener(
+  "visibilitychange",
+  ()=>{
+
+    if(
+      document.visibilityState==="visible"
+    ){
+      checkForUpdate();
+    }
+
+  }
+);
+
+
+window.addEventListener(
+  "online",
+  checkForUpdate
+);
+
+
+/* ==================================================
+   基本工具
+================================================== */
+
+const $=
+id=>document.getElementById(id);
 
 function pad(n){
   return String(n).padStart(2,"0");
 }
 
-function keyOf(d){
-  return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+function key(d){
+
+  return d.getFullYear()+
+    "-"+
+    pad(d.getMonth()+1)+
+    "-"+
+    pad(d.getDate());
+
 }
 
-function sameDate(a,b){
-  return a.getFullYear()===b.getFullYear() &&
-         a.getMonth()===b.getMonth() &&
-         a.getDate()===b.getDate();
+function localDate(y,m,d){
+
+  return new Date(
+    y,
+    m-1,
+    d,
+    12,
+    0,
+    0
+  );
+
 }
 
-function daysBetween(a,b){
-  const x = Date.UTC(a.getFullYear(),a.getMonth(),a.getDate());
-  const y = Date.UTC(b.getFullYear(),b.getMonth(),b.getDate());
-  return Math.floor((x-y)/86400000);
-}
 
-/* =========================
-   做2休2
-========================= */
+let view=new Date();
 
-function isWorkDay(date){
+view.setDate(1);
 
-  let diff = daysBetween(date,WORK_BASE);
+let selected=
+  new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate(),
+    12
+  );
 
-  let cycle = ((diff % 4) + 4) % 4;
 
-  return cycle===0 || cycle===1;
-}
+const notes=
+JSON.parse(
+  localStorage.getItem("shiftNotes")||"{}"
+);
 
-/* =========================
-   每兩個月輪班
-   1-2 夜
-   3-4 早
-   5-6 夜
-   7-8 早
-   9-10 夜
-   11-12 早
-========================= */
 
-function shiftType(date){
+/* ==================================================
+   V6.2 設定儲存
+================================================== */
 
-  if(!isWorkDay(date)){
-    return "休假";
+const settingIds=[
+  "dayStart",
+  "dayEnd",
+  "nightStart",
+  "nightEnd",
+  "dayAlarm",
+  "nightAlarm"
+];
+
+
+function loadSettings(){
+
+  settingIds.forEach(id=>{
+
+    const saved=
+      localStorage.getItem(
+        "shiftSetting_"+id
+      );
+
+    if(saved){
+      $(id).value=saved;
+    }
+
+  });
+
+
+  const auto=
+    localStorage.getItem(
+      "shiftAutoReminder"
+    );
+
+  if(auto!==null){
+
+    $("autoReminder").checked=
+      auto==="true";
+
   }
 
-  const m = date.getMonth()+1;
-
-  if(
-    m===1 || m===2 ||
-    m===5 || m===6 ||
-    m===9 || m===10
-  ){
-    return "夜班";
-  }
-
-  return "早班";
 }
 
-/* =========================
-   國定假日
-   固定日期 + V6 特別假日資料
-========================= */
 
-const specialHolidays = {
+function saveSetting(id){
 
-  /* 2026 */
-  "2026-02-16":"春節假期",
-  "2026-02-17":"春節",
-  "2026-02-18":"春節假期",
-  "2026-02-19":"春節假期",
-  "2026-02-20":"春節假期",
+  localStorage.setItem(
+    "shiftSetting_"+id,
+    $(id).value
+  );
 
-  "2026-02-27":"和平紀念日補假",
-  "2026-04-03":"兒童節補假",
-  "2026-04-06":"清明節補假",
-  "2026-06-19":"端午節",
-  "2026-09-25":"中秋節",
-  "2026-09-28":"教師節",
-  "2026-10-09":"國慶日補假",
-  "2026-10-25":"臺灣光復節",
-  "2026-10-26":"光復節補假",
-  "2026-12-25":"行憲紀念日",
+}
 
-  /* 2027 春節 */
-  "2027-02-04":"春節假期",
-  "2027-02-05":"春節假期",
-  "2027-02-06":"除夕",
-  "2027-02-07":"春節",
-  "2027-02-08":"春節假期",
-  "2027-02-09":"春節假期",
-  "2027-02-10":"春節假期"
+
+/* ==================================================
+   B班 2做2休
+================================================== */
+
+function shiftStatus(d){
+
+  const base=
+    localDate(2026,1,2);
+
+  const target=
+    localDate(
+      d.getFullYear(),
+      d.getMonth()+1,
+      d.getDate()
+    );
+
+  const diff=
+    Math.round(
+      (target-base)/86400000
+    );
+
+  const cycle=
+    ((diff%4)+4)%4;
+
+  const working=
+    cycle===0 ||
+    cycle===1;
+
+
+  if(!working){
+
+    return{
+      work:false,
+      name:"休假"
+    };
+
+  }
+
+
+  const m=
+    d.getMonth()+1;
+
+
+  const night=
+    [1,2,5,6,9,10]
+    .includes(m);
+
+
+  if(night){
+
+    return{
+      work:true,
+      name:"夜班"
+    };
+
+  }
+
+
+  return{
+    work:true,
+    name:"早班"
+  };
+
+}
+
+
+/* ==================================================
+   V6.2 提醒判斷核心
+================================================== */
+
+function reminderForDate(date){
+
+  const shift=
+    shiftStatus(date);
+
+
+  if(!shift.work){
+
+    return{
+      enabled:false,
+      work:false,
+      shift:"休假",
+      time:"",
+      message:"今天休假，不需要上班提醒"
+    };
+
+  }
+
+
+  if(!$("autoReminder").checked){
+
+    return{
+      enabled:false,
+      work:true,
+      shift:shift.name,
+      time:"",
+      message:"自動提醒目前已關閉"
+    };
+
+  }
+
+
+  const alarmTime=
+    shift.name==="早班"
+    ?$("dayAlarm").value
+    :$("nightAlarm").value;
+
+
+  return{
+    enabled:true,
+    work:true,
+    shift:shift.name,
+    time:alarmTime,
+    message:
+      shift.name+
+      "上班日，提醒時間 "+
+      alarmTime
+  };
+
+}
+
+
+/* ==================================================
+   今日提醒狀態
+================================================== */
+
+function renderTodayReminder(){
+
+  const now=
+    new Date();
+
+  const today=
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      12
+    );
+
+
+  const r=
+    reminderForDate(today);
+
+
+  const box=
+    $("todayReminder");
+
+
+  box.classList.remove(
+    "reminderWork",
+    "reminderOff"
+  );
+
+
+  if(r.enabled){
+
+    box.classList.add(
+      "reminderWork"
+    );
+
+    box.innerHTML=`
+
+      <div class="reminderTitle">
+        今天 ${key(today)}
+      </div>
+
+      <div class="reminderMain">
+        🔔 ${r.shift} ${r.time}
+      </div>
+
+      <div class="reminderSub">
+        今天是上班日。<br>
+        自動提醒：已啟用<br>
+        提醒時間：${r.time}
+      </div>
+
+    `;
+
+  }else{
+
+    box.classList.add(
+      "reminderOff"
+    );
+
+    box.innerHTML=`
+
+      <div class="reminderTitle">
+        今天 ${key(today)}
+      </div>
+
+      <div class="reminderMain">
+        ${r.work ? "🔕 自動提醒已關閉" : "🏠 今天休假"}
+      </div>
+
+      <div class="reminderSub">
+        ${r.message}
+      </div>
+
+    `;
+
+  }
+
+
+  renderShortcutData(today);
+
+}
+
+
+/* ==================================================
+   iPhone 捷徑預留資料
+================================================== */
+
+function renderShortcutData(date){
+
+  const shift=
+    shiftStatus(date);
+
+  let alarmTime="";
+
+
+  if(shift.work){
+
+    alarmTime=
+      shift.name==="早班"
+      ?$("dayAlarm").value
+      :$("nightAlarm").value;
+
+  }
+
+
+  const data={
+
+    version:APP_VERSION,
+
+    date:key(date),
+
+    team:"B班",
+
+    work:shift.work,
+
+    shift:shift.name,
+
+    alarm:
+      shift.work
+      ?alarmTime
+      :"",
+
+    autoReminder:
+      $("autoReminder").checked
+
+  };
+
+
+  $("shortcutData").textContent=
+    "捷徑資料："+
+    JSON.stringify(data);
+
+}
+
+
+/* ==================================================
+   固定假日
+================================================== */
+
+function fixedHoliday(y,m,d){
+
+  const map={
+
+    "01-01":"元旦",
+
+    "02-28":"和平紀念日",
+
+    "04-04":"兒童節",
+
+    "05-01":"勞動節",
+
+    "09-28":"教師節",
+
+    "10-10":"國慶日",
+
+    "10-25":"臺灣光復節",
+
+    "12-25":"行憲紀念日"
+
+  };
+
+
+  return map[
+    pad(m)+"-"+pad(d)
+  ]||"";
+
+}
+
+
+/* ==================================================
+   2026 假日
+================================================== */
+
+const official2026={
+
+"2026-01-01":"元旦",
+
+"2026-02-15":"春節假期",
+
+"2026-02-16":"除夕",
+
+"2026-02-17":"春節",
+
+"2026-02-18":"春節",
+
+"2026-02-19":"春節",
+
+"2026-02-20":"春節補假",
+
+"2026-02-27":"和平紀念日補假",
+
+"2026-02-28":"和平紀念日",
+
+"2026-04-03":"兒童節補假",
+
+"2026-04-04":"兒童節",
+
+"2026-04-05":"清明節",
+
+"2026-04-06":"清明節補假",
+
+"2026-05-01":"勞動節",
+
+"2026-06-19":"端午節",
+
+"2026-09-25":"中秋節",
+
+"2026-09-28":"教師節",
+
+"2026-10-09":"國慶日補假",
+
+"2026-10-10":"國慶日",
+
+"2026-10-25":"臺灣光復節",
+
+"2026-10-26":"光復節補假",
+
+"2026-12-25":"行憲紀念日"
+
 };
 
-function fixedHoliday(date){
 
-  const m = date.getMonth()+1;
-  const d = date.getDate();
+/* ==================================================
+   2027 假日
+================================================== */
 
-  if(m===1 && d===1) return "元旦";
+const official2027={
 
-  if(m===2 && d===28) return "和平紀念日";
+"2027-01-01":"元旦",
 
-  if(m===4 && d===4) return "兒童節";
+"2027-02-04":"春節假期",
 
-  if(m===4 && d===5) return "清明節";
+"2027-02-05":"除夕",
 
-  if(m===5 && d===1) return "勞動節";
+"2027-02-06":"春節（初一）",
 
-  if(m===9 && d===28) return "教師節";
+"2027-02-07":"春節（初二）",
 
-  if(m===10 && d===10) return "國慶日";
+"2027-02-08":"春節（初三）",
 
-  if(m===10 && d===25) return "臺灣光復節";
+"2027-02-09":"春節補假",
 
-  if(m===12 && d===25) return "行憲紀念日";
+"2027-02-10":"春節補假",
 
-  return "";
+"2027-02-28":"和平紀念日",
+
+"2027-03-01":"和平紀念日補假",
+
+"2027-04-04":"兒童節",
+
+"2027-04-05":"清明節",
+
+"2027-04-06":"兒童節補假",
+
+"2027-04-30":"勞動節補假",
+
+"2027-05-01":"勞動節",
+
+"2027-10-10":"國慶日",
+
+"2027-10-11":"國慶日補假",
+
+"2027-10-25":"臺灣光復節",
+
+"2027-12-24":"行憲紀念日補假",
+
+"2027-12-25":"行憲紀念日",
+
+"2027-12-31":"2028元旦補假"
+
+};
+
+
+/* ==================================================
+   清明
+================================================== */
+
+function qingmingDay(y){
+
+  const yy=y%100;
+
+  return Math.floor(
+    yy*.2422+4.81
+  )-
+  Math.floor(yy/4);
+
 }
 
-function holidayName(date){
 
-  const key = keyOf(date);
+/* ==================================================
+   2028～2040 補假推算
+================================================== */
 
-  if(specialHolidays[key]){
-    return specialHolidays[key];
+function predictedMakeup(y,m,d){
+
+  if(
+    y<=2027 ||
+    y>2040
+  ){
+    return "";
   }
 
-  return fixedHoliday(date);
+
+  const hs=[
+
+    [1,1,"元旦"],
+
+    [2,28,"和平紀念日"],
+
+    [4,4,"兒童節"],
+
+    [5,1,"勞動節"],
+
+    [9,28,"教師節"],
+
+    [10,10,"國慶日"],
+
+    [10,25,"光復節"],
+
+    [12,25,"行憲紀念日"]
+
+  ];
+
+
+  for(const h of hs){
+
+    const hd=
+      localDate(
+        y,
+        h[0],
+        h[1]
+      );
+
+    const w=
+      hd.getDay();
+
+    const x=
+      new Date(hd);
+
+
+    if(w===6){
+
+      x.setDate(
+        x.getDate()-1
+      );
+
+      if(
+        x.getMonth()+1===m &&
+        x.getDate()===d
+      ){
+        return h[2]+"補假";
+      }
+
+    }
+
+
+    if(w===0){
+
+      x.setDate(
+        x.getDate()+1
+      );
+
+      if(
+        x.getMonth()+1===m &&
+        x.getDate()===d
+      ){
+        return h[2]+"補假";
+      }
+
+    }
+
+  }
+
+
+  return "";
+
 }
 
-/* =========================
+
+/* ==================================================
+   節氣
+================================================== */
+
+function solarTerm(m,d){
+
+  const t={
+
+    "01-05":"小寒",
+    "01-20":"大寒",
+
+    "02-04":"立春",
+    "02-19":"雨水",
+
+    "03-05":"驚蟄",
+    "03-20":"春分",
+
+    "04-05":"清明",
+    "04-20":"穀雨",
+
+    "05-05":"立夏",
+    "05-21":"小滿",
+
+    "06-05":"芒種",
+    "06-21":"夏至",
+
+    "07-07":"小暑",
+    "07-23":"大暑",
+
+    "08-07":"立秋",
+    "08-23":"處暑",
+
+    "09-07":"白露",
+    "09-23":"秋分",
+
+    "10-08":"寒露",
+    "10-23":"霜降",
+
+    "11-07":"立冬",
+    "11-22":"小雪",
+
+    "12-07":"大雪",
+    "12-22":"冬至"
+
+  };
+
+
+  return t[
+    pad(m)+"-"+pad(d)
+  ]||"";
+
+}
+
+
+/* ==================================================
    農曆
-   使用 iPhone/Safari 內建
-   Chinese Calendar
-========================= */
+================================================== */
 
 function lunarText(date){
 
   try{
 
-    const fmt = new Intl.DateTimeFormat(
-      "zh-Hant-u-ca-chinese",
+    return new Intl.DateTimeFormat(
+      "zh-TW-u-ca-chinese",
       {
         month:"short",
         day:"numeric"
       }
-    );
-
-    return fmt.format(date);
+    )
+    .format(date)
+    .replace(/\s/g,"");
 
   }catch(e){
 
     return "";
 
   }
+
 }
 
-/* =========================
-   節氣
-   常用節氣日期近似顯示
-========================= */
 
-const solarTerms = {
-  "01-05":"小寒",
-  "01-20":"大寒",
-  "02-04":"立春",
-  "02-19":"雨水",
-  "03-05":"驚蟄",
-  "03-20":"春分",
-  "04-04":"清明",
-  "04-20":"穀雨",
-  "05-05":"立夏",
-  "05-21":"小滿",
-  "06-05":"芒種",
-  "06-21":"夏至",
-  "07-07":"小暑",
-  "07-22":"大暑",
-  "08-07":"立秋",
-  "08-23":"處暑",
-  "09-07":"白露",
-  "09-23":"秋分",
-  "10-08":"寒露",
-  "10-23":"霜降",
-  "11-07":"立冬",
-  "11-22":"小雪",
-  "12-07":"大雪",
-  "12-21":"冬至"
-};
+function lunarParts(date){
 
-function solarTerm(date){
+  try{
 
-  const k =
-    pad(date.getMonth()+1) +
-    "-" +
-    pad(date.getDate());
+    const p=
+      new Intl.DateTimeFormat(
+        "zh-TW-u-ca-chinese",
+        {
+          month:"numeric",
+          day:"numeric"
+        }
+      )
+      .formatToParts(date);
 
-  return solarTerms[k] || "";
-}
 
-/* =========================
-   月曆
-========================= */
+    let m=0;
 
-function renderCalendar(){
+    let d=0;
 
-  const y = viewDate.getFullYear();
-  const m = viewDate.getMonth();
 
-  document.getElementById("monthTitle").textContent =
-    y+" 年 "+(m+1)+" 月";
+    p.forEach(x=>{
 
-  document.getElementById("yearSelect").value = y;
+      if(x.type==="month"){
 
-  const box = document.getElementById("calendar");
+        m=parseInt(x.value);
 
-  box.innerHTML="";
-
-  const first = new Date(y,m,1);
-
-  const startWeek = first.getDay();
-
-  const total =
-    new Date(y,m+1,0).getDate();
-
-  for(let i=0;i<startWeek;i++){
-
-    const empty=document.createElement("div");
-
-    empty.className="day empty";
-
-    box.appendChild(empty);
-
-  }
-
-  const today=new Date();
-
-  for(let d=1;d<=total;d++){
-
-    const date=new Date(y,m,d);
-
-    const work=isWorkDay(date);
-
-    const shift=shiftType(date);
-
-    const holiday=holidayName(date);
-
-    const lunar=lunarText(date);
-
-    const term=solarTerm(date);
-
-    const cell=document.createElement("div");
-
-    cell.className="day";
-
-    if(!work){
-      cell.classList.add("off");
-    }
-
-    if(date.getDay()===0 || date.getDay()===6){
-      cell.classList.add("weekend");
-    }
-
-    if(holiday){
-      cell.classList.add("holiday");
-    }
-
-    if(sameDate(date,today)){
-      cell.classList.add("today");
-    }
-
-    if(sameDate(date,selectedDate)){
-      cell.classList.add("selected");
-    }
-
-    let shiftClass="offShift";
-
-    if(shift==="早班"){
-      shiftClass="dayShift";
-    }
-
-    if(shift==="夜班"){
-      shiftClass="nightShift";
-    }
-
-    let lunarLine=lunar;
-
-    if(term){
-      lunarLine += "・"+term;
-    }
-
-    cell.innerHTML=`
-      <div class="num">${d}</div>
-      <div class="shift ${shiftClass}">
-        ${shift}
-      </div>
-      <div class="lunar">
-        ${lunarLine}
-      </div>
-      ${
-        holiday
-        ? `<div class="holidayName">${holiday}</div>`
-        : ""
       }
-    `;
 
-    cell.onclick=()=>selectDate(date);
 
-    box.appendChild(cell);
+      if(x.type==="day"){
+
+        d=parseInt(x.value);
+
+      }
+
+    });
+
+
+    return{
+      m,
+      d
+    };
+
+  }catch(e){
+
+    return{
+      m:0,
+      d:0
+    };
+
   }
+
 }
 
-/* =========================
-   日期詳細資料
-========================= */
 
-function selectDate(date){
+function lunarHoliday(date){
 
-  selectedDate =
-    new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    );
+  const p=
+    lunarParts(date);
 
-  renderCalendar();
 
-  renderDetail();
+  if(
+    p.m===5 &&
+    p.d===5
+  ){
+    return "端午節";
+  }
 
-  loadNote();
+
+  if(
+    p.m===8 &&
+    p.d===15
+  ){
+    return "中秋節";
+  }
+
+
+  return "";
+
 }
 
-function renderDetail(){
 
-  const d=selectedDate;
+function chineseNewYear(date){
 
-  const shift=shiftType(d);
+  const p=
+    lunarParts(date);
 
-  const holiday=holidayName(d);
 
-  const lunar=lunarText(d);
-
-  const term=solarTerm(d);
-
-  const weekNames=[
-    "星期日",
-    "星期一",
-    "星期二",
-    "星期三",
-    "星期四",
-    "星期五",
-    "星期六"
-  ];
-
-  document.getElementById("detailDate").textContent =
-    `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 ${weekNames[d.getDay()]}`;
-
-  let html="";
-
-  if(shift==="休假"){
-
-    html +=
-      `<span class="badge off">休假</span>`;
-
-    html +=
-      `<div class="detailLine"><b>今天：</b>休假，不用上班</div>`;
-
+  if(
+    p.m===1 &&
+    [1,2,3].includes(p.d)
+  ){
+    return "春節";
   }
 
-  if(shift==="早班"){
 
-    html +=
-      `<span class="badge work">早班・上班日</span>`;
+  return "";
 
-    html +=
-      `<div class="detailLine"><b>上班：</b>08:00</div>`;
-
-    html +=
-      `<div class="detailLine"><b>下班：</b>20:10</div>`;
-
-    html +=
-      `<div class="detailLine"><b>鬧鐘：</b>${getDayAlarm()}</div>`;
-
-  }
-
-  if(shift==="夜班"){
-
-    html +=
-      `<span class="badge work">夜班・上班日</span>`;
-
-    html +=
-      `<div class="detailLine"><b>上班：</b>20:00</div>`;
-
-    html +=
-      `<div class="detailLine"><b>下班：</b>隔日 08:10</div>`;
-
-    html +=
-      `<div class="detailLine"><b>鬧鐘：</b>${getNightAlarm()}</div>`;
-
-  }
-
-  html +=
-    `<div class="detailLine"><b>農曆：</b>${lunar || "—"}</div>`;
-
-  if(term){
-
-    html +=
-      `<div class="detailLine"><b>節氣：</b>${term}</div>`;
-
-  }
-
-  if(holiday){
-
-    html +=
-      `<div class="detailLine" style="color:var(--red)">
-        <b>國定假日：</b>${holiday}
-       </div>`;
-
-  }
-
-  document.getElementById("detailContent").innerHTML=html;
 }
 
-/* =========================
-   上一月 / 下一月
-========================= */
 
-function changeMonth(n){
+/* ==================================================
+   假日名稱
+================================================== */
 
-  let y=viewDate.getFullYear();
-
-  let m=viewDate.getMonth()+n;
-
-  const next=new Date(y,m,1);
-
-  if(next.getFullYear()<START_YEAR){
-    return;
-  }
-
-  if(next.getFullYear()>END_YEAR){
-    return;
-  }
-
-  viewDate=next;
-
-  renderCalendar();
-}
-
-/* =========================
-   今天
-========================= */
-
-function goToday(){
-
-  const t=new Date();
-
-  viewDate=
-    new Date(
-      t.getFullYear(),
-      t.getMonth(),
-      1
-    );
-
-  selectedDate=
-    new Date(
-      t.getFullYear(),
-      t.getMonth(),
-      t.getDate()
-    );
-
-  renderCalendar();
-
-  renderDetail();
-
-  loadNote();
-}
-
-/* =========================
-   年份
-========================= */
-
-function setupYears(){
-
-  const sel=
-    document.getElementById("yearSelect");
-
-  sel.innerHTML="";
-
-  for(let y=START_YEAR;y<=END_YEAR;y++){
-
-    const op=document.createElement("option");
-
-    op.value=y;
-
-    op.textContent=y+" 年";
-
-    sel.appendChild(op);
-  }
-}
-
-function jumpYear(){
+function holidayName(date){
 
   const y=
-    Number(
-      document.getElementById("yearSelect").value
+    date.getFullYear();
+
+  const m=
+    date.getMonth()+1;
+
+  const d=
+    date.getDate();
+
+  const k=
+    key(date);
+
+
+  if(
+    y===2026 &&
+    official2026[k]
+  ){
+    return official2026[k];
+  }
+
+
+  if(
+    y===2027 &&
+    official2027[k]
+  ){
+    return official2027[k];
+  }
+
+
+  let names=[];
+
+
+  const f=
+    fixedHoliday(
+      y,m,d
     );
 
-  viewDate=
+
+  if(f){
+    names.push(f);
+  }
+
+
+  if(
+    m===4 &&
+    d===qingmingDay(y) &&
+    !names.includes("清明節")
+  ){
+
+    names.push(
+      "清明節"
+    );
+
+  }
+
+
+  const l=
+    lunarHoliday(date);
+
+
+  if(l){
+    names.push(l);
+  }
+
+
+  const c=
+    chineseNewYear(date);
+
+
+  if(c){
+    names.push(c);
+  }
+
+
+  const mk=
+    predictedMakeup(
+      y,m,d
+    );
+
+
+  if(mk){
+    names.push(mk);
+  }
+
+
+  return[
+    ...new Set(names)
+  ].join("・");
+
+}
+
+
+/* ==================================================
+   月曆
+================================================== */
+
+function render(){
+
+  const y=
+    view.getFullYear();
+
+  const m=
+    view.getMonth();
+
+
+  $("monthTitle").textContent=
+    y+"年 "+(m+1)+"月";
+
+
+  $("navTitle").textContent=
+    y+" / "+pad(m+1);
+
+
+  const grid=
+    $("calendar");
+
+
+  grid.innerHTML="";
+
+
+  const firstDay=
     new Date(
-      y,
-      viewDate.getMonth(),
+      y,m,1
+    ).getDay();
+
+
+  const total=
+    new Date(
+      y,m+1,0
+    ).getDate();
+
+
+  for(
+    let i=0;
+    i<firstDay;
+    i++
+  ){
+
+    const b=
+      document.createElement(
+        "div"
+      );
+
+
+    b.className=
+      "day empty";
+
+
+    grid.appendChild(b);
+
+  }
+
+
+  for(
+    let d=1;
+    d<=total;
+    d++
+  ){
+
+    const date=
+      new Date(
+        y,m,d,12
+      );
+
+
+    const status=
+      shiftStatus(date);
+
+
+    const holiday=
+      holidayName(date);
+
+
+    const term=
+      solarTerm(
+        m+1,d
+      );
+
+
+    const lunar=
+      lunarText(date);
+
+
+    const cell=
+      document.createElement(
+        "div"
+      );
+
+
+    cell.className=
+      "day";
+
+
+    if(
+      date.getDay()===0 ||
+      date.getDay()===6
+    ){
+
+      cell.classList.add(
+        "weekend"
+      );
+
+    }
+
+
+    if(!status.work){
+
+      cell.classList.add(
+        "offDay"
+      );
+
+    }
+
+
+    if(holiday){
+
+      cell.classList.add(
+        "holiday"
+      );
+
+    }
+
+
+    if(
+      key(date)===
+      key(selected)
+    ){
+
+      cell.classList.add(
+        "selected"
+      );
+
+    }
+
+
+    if(
+      key(date)===
+      key(new Date())
+    ){
+
+      cell.classList.add(
+        "today"
+      );
+
+    }
+
+
+    let sc=
+      status.name==="早班"
+      ?"dayShift"
+      :status.name==="夜班"
+      ?"nightShift"
+      :"off";
+
+
+    cell.innerHTML=`
+
+      <div class="num">
+        ${d}
+      </div>
+
+      <div class="lunar">
+        ${lunar}
+      </div>
+
+      <div class="shift ${sc}">
+        ${status.name}
+      </div>
+
+      ${
+        holiday
+        ?`<div class="holidayName">${holiday}</div>`
+        :""
+      }
+
+      ${
+        term
+        ?`<div class="term">${term}</div>`
+        :""
+      }
+
+    `;
+
+
+    cell.onclick=()=>{
+
+      selected=date;
+
+      render();
+
+      showSelected();
+
+    };
+
+
+    grid.appendChild(
+      cell
+    );
+
+  }
+
+
+  showSelected();
+
+}
+
+
+/* ==================================================
+   選擇日期
+================================================== */
+
+function showSelected(){
+
+  const s=
+    shiftStatus(selected);
+
+
+  const h=
+    holidayName(selected);
+
+
+  let detail=
+    s.name==="早班"
+    ?$("dayStart").value+
+      " ～ "+
+      $("dayEnd").value
+
+    :s.name==="夜班"
+    ?$("nightStart").value+
+      " ～ 次日 "+
+      $("nightEnd").value
+
+    :"今天休假";
+
+
+  const reminder=
+    reminderForDate(selected);
+
+
+  let reminderLine="";
+
+
+  if(!s.work){
+
+    reminderLine=
+      "提醒：<strong style='color:#ff7183'>休假日，不提醒</strong>";
+
+  }else if(reminder.enabled){
+
+    reminderLine=
+      "提醒：<strong style='color:#35d0a0'>"+
+      reminder.time+
+      " 自動提醒</strong>";
+
+  }else{
+
+    reminderLine=
+      "提醒：自動提醒已關閉";
+
+  }
+
+
+  $("dateInfo").innerHTML=`
+
+    <strong>
+      ${selected.getFullYear()}年
+      ${selected.getMonth()+1}月
+      ${selected.getDate()}日
+    </strong>
+
+    <br>
+
+    農曆：
+    ${lunarText(selected)||"—"}
+
+    <br>
+
+    班別：
+    <strong>
+      ${s.name}
+    </strong>
+
+    <br>
+
+    時間：
+    ${detail}
+
+    <br>
+
+    ${reminderLine}
+
+    <br>
+
+    ${
+      h
+      ?`假日：<strong style="color:#ff7183">${h}</strong>`
+      :"假日：—"
+    }
+
+  `;
+
+
+  $("note").value=
+    notes[
+      key(selected)
+    ]||"";
+
+}
+
+
+/* ==================================================
+   上一月／下一月
+================================================== */
+
+$("prev").onclick=()=>{
+
+  view.setMonth(
+    view.getMonth()-1
+  );
+
+  render();
+
+};
+
+
+$("next").onclick=()=>{
+
+  view.setMonth(
+    view.getMonth()+1
+  );
+
+  render();
+
+};
+
+
+/* ==================================================
+   今天
+================================================== */
+
+$("todayBtn").onclick=()=>{
+
+  const t=
+    new Date();
+
+
+  selected=
+    new Date(
+      t.getFullYear(),
+      t.getMonth(),
+      t.getDate(),
+      12
+    );
+
+
+  view=
+    new Date(
+      t.getFullYear(),
+      t.getMonth(),
       1
     );
 
-  renderCalendar();
-}
 
-/* =========================
-   鬧鐘
-========================= */
+  render();
 
-function getDayAlarm(){
+  renderTodayReminder();
 
-  return localStorage.getItem("B_DAY_ALARM")
-    || "05:50";
-}
+};
 
-function getNightAlarm(){
 
-  return localStorage.getItem("B_NIGHT_ALARM")
-    || "17:50";
-}
-
-function loadAlarm(){
-
-  document.getElementById("dayAlarm").value =
-    getDayAlarm();
-
-  document.getElementById("nightAlarm").value =
-    getNightAlarm();
-}
-
-function saveAlarm(){
-
-  const day =
-    document.getElementById("dayAlarm").value;
-
-  const night =
-    document.getElementById("nightAlarm").value;
-
-  localStorage.setItem(
-    "B_DAY_ALARM",
-    day
-  );
-
-  localStorage.setItem(
-    "B_NIGHT_ALARM",
-    night
-  );
-
-  renderDetail();
-
-  alert("鬧鐘時間已儲存");
-}
-
-/* =========================
+/* ==================================================
    記事
-========================= */
+================================================== */
 
-function noteKey(){
+$("saveNote").onclick=()=>{
 
-  return "B_NOTE_"+keyOf(selectedDate);
-}
+  notes[
+    key(selected)
+  ]=
+    $("note").value;
 
-function loadNote(){
-
-  document.getElementById("note").value =
-    localStorage.getItem(noteKey())
-    || "";
-}
-
-function saveNote(){
-
-  const value =
-    document.getElementById("note").value;
 
   localStorage.setItem(
-    noteKey(),
-    value
+    "shiftNotes",
+    JSON.stringify(notes)
   );
 
-  alert("記事已儲存");
+
+  alert(
+    "記事已儲存"
+  );
+
+};
+
+
+/* ==================================================
+   建立當天提醒
+================================================== */
+
+$("remindBtn").onclick=()=>{
+
+  const s=
+    shiftStatus(selected);
+
+
+  if(!s.work){
+
+    alert(
+      "這一天是休假日。\n\n不建立上班提醒。"
+    );
+
+    return;
+
+  }
+
+
+  const alarmTime=
+    s.name==="早班"
+    ?$("dayAlarm").value
+    :$("nightAlarm").value;
+
+
+  alert(
+
+    (selected.getMonth()+1)+
+    "月"+
+    selected.getDate()+
+    "日\n\n"+
+    s.name+
+    "上班日\n"+
+    "提醒時間："+
+    alarmTime+
+    "\n\n"+
+    "V6.2 已確認這一天是上班日。\n"+
+    "下一步設定 iPhone 捷徑後，將由捷徑建立／啟用真正的系統鬧鐘。"
+
+  );
+
+};
+
+
+/* ==================================================
+   自動提醒開關
+================================================== */
+
+$("autoReminder").addEventListener(
+  "change",
+  ()=>{
+
+    localStorage.setItem(
+      "shiftAutoReminder",
+      $("autoReminder").checked
+    );
+
+
+    renderTodayReminder();
+
+    showSelected();
+
+  }
+);
+
+
+/* ==================================================
+   時間設定
+================================================== */
+
+settingIds.forEach(id=>{
+
+  $(id).addEventListener(
+    "change",
+    ()=>{
+
+      saveSetting(id);
+
+      showSelected();
+
+      renderTodayReminder();
+
+    }
+  );
+
+});
+
+
+/* ==================================================
+   深色模式
+================================================== */
+
+$("themeBtn").onclick=()=>{
+
+  document.body
+    .classList
+    .toggle("light");
+
+
+  localStorage.setItem(
+    "theme",
+    document.body
+      .classList
+      .contains("light")
+      ?"light"
+      :"dark"
+  );
+
+};
+
+
+if(
+  localStorage.getItem(
+    "theme"
+  )==="light"
+){
+
+  document.body
+    .classList
+    .add("light");
+
 }
 
-/* =========================
+
+/* ==================================================
    啟動
-========================= */
+================================================== */
 
-setupYears();
+loadSettings();
 
-loadAlarm();
+render();
 
-goToday();
+renderTodayReminder();
 
 </script>
 
