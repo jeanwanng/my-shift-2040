@@ -24,6 +24,7 @@ h1{margin:0;font-size:28px}.sub{color:var(--muted);margin-top:6px}
 .topbar,.nav{display:flex;justify-content:space-between;align-items:center;gap:10px}.monthTitle{font-size:24px;font-weight:800}
 .todayBtn,.primary{background:var(--blue);color:white;border:0;border-radius:18px;padding:13px 20px;font-weight:800}
 .nav{margin-bottom:16px}.nav button{width:54px;height:54px;border:0;border-radius:17px;background:#17263d;color:white;font-size:25px}
+.pickerTrigger{flex:1;height:54px;border:1px solid var(--line)!important;border-radius:14px!important;background:#17263d!important;color:white!important;font-size:18px!important;font-weight:900}
 .week,.grid{display:grid;grid-template-columns:repeat(7,1fr)}.week{background:#02091a;border:1px solid #17263d}
 .week div{text-align:center;padding:13px 2px;font-weight:800;font-size:18px}.week div:first-child,.week div:last-child{color:var(--red)}
 .grid{margin-top:5px}
@@ -51,18 +52,25 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 .field input,.field select{width:100%;border:1px solid var(--line);border-radius:14px;background:#17263d;color:white;padding:12px}
 .notice{color:var(--muted);font-size:13px;line-height:1.6;margin-top:14px}
 .light{--bg:#eef3f9;--card:#fff;--line:#c8d5e5;--text:#152033;--muted:#64748b}
-.light .theme,.light .nav button,.light .secondary,.light textarea,.light .field input,.light .field select{background:#e4ebf5;color:#152033}
+.light .theme,.light .nav button,.light .secondary,.light textarea,.light .field input,.light .field select{background-color:#e4ebf5;color:#152033}
 .light .week{background:#e8eef7}.light .week div{color:#152033}.light .week div:first-child,.light .week div:last-child{color:#e7192d}
 .light .day.today{box-shadow:inset 0 0 0 3px #111}.light .info{color:#334155}.light .info strong{color:#111827}
+.pickerBackdrop{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.48);display:none;align-items:center;justify-content:center;padding:22px}.pickerBackdrop.open{display:flex}
+.pickerPanel{width:min(520px,100%);background:#f5f2f5;color:#8e8e93;border-radius:30px;padding:24px 22px 18px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.pickerHeading{text-align:center;font-size:27px;font-weight:700;margin:3px 0 18px}.wheelWrap{position:relative;display:grid;grid-template-columns:1fr 1fr;height:250px;overflow:hidden}
+.wheelWrap::before,.wheelWrap::after{content:"";position:absolute;left:8px;right:8px;height:1px;background:#b8b8bd;z-index:3;pointer-events:none}.wheelWrap::before{top:99px}.wheelWrap::after{top:150px}
+.wheel{height:250px;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior:contain;padding:100px 0}.wheel::-webkit-scrollbar{display:none}
+.wheelItem{height:50px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:31px;color:#aaa;transition:.15s}.wheelItem.active{color:#2637ff;font-weight:800;font-size:36px}
+.pickerActions{display:flex;gap:12px;margin-top:14px}.pickerActions button{flex:1;border:0;border-radius:16px;padding:13px;font-weight:800}.pickerCancel{background:#e2e2e7;color:#555}.pickerDone{background:#2d3cff;color:#fff}
 @media(max-width:520px){h1{font-size:25px}.card{padding:12px;border-radius:22px}.day{min-height:92px;padding:5px 3px}.num{font-size:17px}.lunar,.holidayName,.term{font-size:9px}.shift{font-size:10px}.shift.off{font-size:12px}.settings{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div><h1 id="appTitle">四班二輪班表</h1><div class="sub"><span id="appSub">V6.9 假日穩定版｜2做2休｜2026・2027官方假日｜至2040年</span></div></div><button class="theme" id="themeBtn">☀ / 🌙</button></header>
+<header><div><h1 id="appTitle">四班二輪班表</h1><div class="sub"><span id="appSub">V7.1 年月滾輪選擇版｜2做2休｜2026・2027官方假日｜至2040年</span></div></div><button class="theme" id="themeBtn">☀ / 🌙</button></header>
 <section class="card">
 <div class="topbar"><div class="monthTitle" id="monthTitle"></div><button class="todayBtn" id="todayBtn">今天</button></div>
-<div class="nav" style="margin-top:14px"><button id="prev">‹</button><strong id="navTitle"></strong><button id="next">›</button></div>
+<div class="nav" style="margin-top:14px"><button id="prev" aria-label="上一個月">‹</button><button class="pickerTrigger" id="pickerTrigger" aria-label="選擇年份與月份"></button><button id="next" aria-label="下一個月">›</button></div>
 <div class="week"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
 <div class="grid" id="calendar"></div>
 <div class="legend"><span><i class="dot blue"></i>早班</span><span><i class="dot purple"></i>夜班</span><span><i class="dot pink"></i>休假</span><span><i class="dot red"></i>國定假日／補假</span><span><i class="dot green"></i>節氣</span></div>
@@ -98,6 +106,13 @@ textarea{width:100%;min-height:130px;border:2px solid var(--line);background:#17
 <div class="actions" style="margin-top:14px"><button class="primary" id="saveSchedule">儲存班表設定</button><button class="secondary" id="resetSchedule">恢復B班預設</button></div>
 <div class="notice" id="ruleSummary"></div>
 <div class="notice">每支手機會各自保存自己的班表設定；分享同一網址給 A／C／D 班時，他們修改自己的設定不會改到你的 B 班。<br><br>2026、2027國定假日及補假採已建資料；2028～2040固定假日依規則顯示。</div></section>
+</div>
+<div class="pickerBackdrop" id="yearMonthDialog" role="dialog" aria-modal="true" aria-labelledby="pickerHeading">
+ <div class="pickerPanel">
+  <div class="pickerHeading" id="pickerHeading">請選擇月份</div>
+  <div class="wheelWrap"><div class="wheel" id="yearWheel"></div><div class="wheel" id="monthWheel"></div></div>
+  <div class="pickerActions"><button class="pickerCancel" id="pickerCancel">取消</button><button class="pickerDone" id="pickerDone">完成</button></div>
+ </div>
 </div>
 <script>
 const $=id=>document.getElementById(id);
@@ -230,8 +245,18 @@ function holidayName(date){
  const mk=predictedMakeup(y,m,d);if(mk)names.push(mk);
  return [...new Set(names)].join("・");
 }
+const pickerState={year:view.getFullYear(),month:view.getMonth()+1};
+function initDatePickers(){
+ const yw=$("yearWheel"),mw=$("monthWheel");
+ for(let y=2026;y<=2040;y++){const el=document.createElement("div");el.className="wheelItem";el.dataset.value=y;el.textContent=y+"年";yw.appendChild(el)}
+ for(let m=1;m<=12;m++){const el=document.createElement("div");el.className="wheelItem";el.dataset.value=m;el.textContent=m+"月";mw.appendChild(el)}
+ const bind=(wheel,key)=>{let timer;wheel.addEventListener("scroll",()=>{clearTimeout(timer);timer=setTimeout(()=>{const items=[...wheel.children],center=wheel.scrollTop+wheel.clientHeight/2;let best=items[0],dist=Infinity;items.forEach(el=>{const d=Math.abs(el.offsetTop+el.offsetHeight/2-center);if(d<dist){dist=d;best=el}});pickerState[key]=Number(best.dataset.value);items.forEach(el=>el.classList.toggle("active",el===best));wheel.scrollTo({top:best.offsetTop-wheel.clientHeight/2+best.offsetHeight/2,behavior:"smooth"})},70)})};
+ bind(yw,"year");bind(mw,"month");
+}
+function selectWheelValue(id,value){const wheel=$(id),el=wheel.querySelector(`[data-value="${value}"]`);if(el){[...wheel.children].forEach(x=>x.classList.toggle("active",x===el));wheel.scrollTop=el.offsetTop-wheel.clientHeight/2+el.offsetHeight/2}}
+function openMonthPicker(){pickerState.year=Math.min(2040,Math.max(2026,view.getFullYear()));pickerState.month=view.getMonth()+1;$("yearMonthDialog").classList.add("open");requestAnimationFrame(()=>{selectWheelValue("yearWheel",pickerState.year);selectWheelValue("monthWheel",pickerState.month)})}
 function render(){
- const y=view.getFullYear(),m=view.getMonth();$("monthTitle").textContent=y+"年 "+(m+1)+"月";$("navTitle").textContent=y+" / "+pad(m+1);
+ const y=view.getFullYear(),m=view.getMonth();$("monthTitle").textContent=y+"年 "+(m+1)+"月";$("pickerTrigger").textContent=y+"年 / "+(m+1)+"月";
  const grid=$("calendar");grid.innerHTML="";const firstDay=new Date(y,m,1).getDay(),total=new Date(y,m+1,0).getDate();
  for(let i=0;i<firstDay;i++){const b=document.createElement("div");b.className="day empty";grid.appendChild(b)}
  for(let d=1;d<=total;d++){
@@ -253,6 +278,11 @@ function showSelected(){
 $("prev").onclick=()=>{view.setMonth(view.getMonth()-1);render()};
 $("next").onclick=()=>{view.setMonth(view.getMonth()+1);render()};
 $("todayBtn").onclick=()=>{const t=new Date();selected=new Date(t.getFullYear(),t.getMonth(),t.getDate(),12);view=new Date(t.getFullYear(),t.getMonth(),1);render()};
+$("pickerTrigger").onclick=openMonthPicker;
+$("monthTitle").onclick=openMonthPicker;
+$("pickerCancel").onclick=()=>$("yearMonthDialog").classList.remove("open");
+$("pickerDone").onclick=()=>{view=new Date(pickerState.year,pickerState.month-1,1);selected=new Date(pickerState.year,pickerState.month-1,1,12);$("yearMonthDialog").classList.remove("open");render()};
+$("yearMonthDialog").onclick=e=>{if(e.target===$("yearMonthDialog"))$("yearMonthDialog").classList.remove("open")};
 $("saveNote").onclick=()=>{notes[key(selected)]=$("note").value;localStorage.setItem("shiftNotes",JSON.stringify(notes));alert("記事已儲存")};
 $("remindBtn").onclick=()=>{const s=shiftStatus(selected);if(!s.work){alert("這一天是休假／請假，不建立上班提醒。");return}const a=reminderTime(s);dayReminders[key(selected)]={time:a,shift:s.shiftName||s.name,auto:false};saveDayChanges();render();renderReminderLog();alert((selected.getMonth()+1)+"月"+selected.getDate()+"日 "+s.name+"提醒已記錄："+a+"。\n\n注意：iPhone 網頁不能直接新增系統鬧鐘，系統鬧鐘仍需透過『捷徑』或『時鐘』設定。")};
 $("leaveBtn").onclick=()=>setDayOverride("leave");
@@ -277,7 +307,7 @@ function saveSchedule(){
 function updateScheduleUI(){
  const c=scheduleConfig();
   $("appTitle").textContent="四班二輪班表";
- $("appSub").textContent=`V6.9 假日穩定版｜${c.work}做${c.off}休｜2026・2027官方假日｜至2040年`;
+ $("appSub").textContent=`V7.1 年月滾輪選擇版｜${c.work}做${c.off}休｜2026・2027官方假日｜至2040年`;
  $("ruleSummary").innerHTML=`${c.team}班：${c.work}做${c.off}休。<br>循環起始：${$("cycleStart").value}（第一個上班日）<br>1–2月：${$("shift12").value==="night"?"夜班":"早班"}；3–4月：${$("shift34").value==="night"?"夜班":"早班"}；5–6月：${$("shift56").value==="night"?"夜班":"早班"}；7–8月：${$("shift78").value==="night"?"夜班":"早班"}；9–10月：${$("shift910").value==="night"?"夜班":"早班"}；11–12月：${$("shift1112").value==="night"?"夜班":"早班"}。`;
 }
 scheduleIds.forEach(id=>$(id).addEventListener("change",()=>{updateScheduleUI();render();showTodayReminder()}));
@@ -304,7 +334,7 @@ function renderReminderLog(){
 
 // V6.3 PWA/桌面版更新檢查：每次啟動與回到 App 都向伺服器確認 index.html。
 // 若 GitHub Pages 上的版本內容不同，清除 Cache Storage 後重新載入。
-const APP_VERSION="6.9";
+const APP_VERSION="7.1";
 async function checkForUpdate(){
  try{
   const r=await fetch("./index.html?v="+Date.now(),{cache:"no-store"});
@@ -325,6 +355,7 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 
 // 先畫班表，再處理網路與快取；任何舊資料錯誤都不能讓月曆變成空白。
 function startApp(){
+ initDatePickers();
  try{loadSchedule()}catch(e){
   scheduleIds.forEach(id=>{if($(id))$(id).value=defaults[id]});
   updateScheduleUI();
